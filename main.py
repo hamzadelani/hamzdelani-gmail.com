@@ -1,20 +1,22 @@
-#Comparing Amazon and google cumulative returns
-import pandas as pd
+#Daily, monthly, and annual returns
 import matplotlib.pyplot as plt
-google=pd.read_csv('C:/Users/hamza/OneDrive/Desktop/AMZN_GOOG_MSFT/GOOG.csv',parse_dates=['Date'],index_col='Date').dropna()
-microsoft=pd.read_csv('C:/Users/hamza/OneDrive/Desktop/AMZN_GOOG_MSFT/MSFT.csv',parse_dates=['Date'],index_col='Date').dropna()
-print(google.info())
-print(microsoft.info())
-closing_prices=pd.concat([google['Close'],microsoft['Close']],axis=1)
-starting_price=closing_prices.iloc[0]
-Normalized_price=closing_prices.div(starting_price).mul(100)
-Normalized_price.columns=['Google','Microsoft']
-print(Normalized_price.head())
-Normalized_price.plot()
-plt.xlabel('Years')
-plt.ylabel('Returns on both stocks')
-plt.title('Google vs Microsoft stock prices')
+from pandas_datareader import DataReader
+from datetime import date
+start_date=date(2011,11,28)
+end_date=date(2021,11,26)
+series_code='DJIA'
+data_source='fred'
+djia=DataReader(series_code,data_source,start_date,end_date).dropna()
+djia=djia.rename(columns={'DJIA':'Price'})
+print(djia.info())
+print(djia.head(10))
+djia['Monthly_returns']=djia.Price.pct_change(periods=30).mul(100)
+djia['Annual_returns']=djia.Price.pct_change(periods=360).mul(100)
+print(djia.tail(20))
+djia.plot(subplots=True)
 plt.show()
+
+
 
 
 
