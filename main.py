@@ -1,33 +1,26 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-import pandas as pd
 import matplotlib.pyplot as plt
 from pandas_datareader import DataReader
 from datetime import date
-start_date=date(2011,11,27)
-end_date=date(2021,11,26)
-series_code='DGS10'
-data_source='fred'
-interest_rate=DataReader(series_code,data_source,start_date,end_date)
-data_source_2='yahoo'
-djia=DataReader('^DJI',data_source_2,start_date,end_date)
-interrelation=pd.concat([djia['Close'],interest_rate],axis=1)
-print(interrelation.info())
-print(interrelation.head())
-interrelation.columns=['DJIA','Interest Rate']
-interrelation.plot(secondary_y='Interest Rate')
+amzn=pd.read_csv('C:/Users/hamza/OneDrive/Desktop/AMZN_GOOG_MSFT/AMZN.csv',parse_dates=['Date'],index_col='Date').dropna()
+goog=pd.read_csv('C:/Users/hamza/OneDrive/Desktop/AMZN_GOOG_MSFT/GOOG.csv',parse_dates=['Date'],index_col='Date').dropna()
+msft=pd.read_csv('C:/Users/hamza/OneDrive/Desktop/AMZN_GOOG_MSFT/MSFT.csv',parse_dates=['Date'],index_col='Date').dropna()
+start_date=date(2006,1,3)
+series_code='^GSPC'
+data_source='yahoo'
+SP500=DataReader(series_code,data_source,start_date)
+print(amzn.info())
+print(goog.info())
+print(msft.info())
+print(SP500.info())
+Closing_prices=pd.concat([amzn['Close'],goog['Close'],msft['Close'],SP500['Close']],axis=1).dropna()
+Starting_price=Closing_prices.iloc[0]
+print(Starting_price.head())
+Normalized_price=Closing_prices.div(Starting_price).mul(100)
+Normalized_price.columns=['Amazon','Google','Microsoft','S&P500']
+print(Normalized_price.head())
+Normalized_price.plot()
+plt.xlabel('Years')
+plt.ylabel('Stock Growth')
+plt.title('Stock prices vs Benchmark')
 plt.show()
+
