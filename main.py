@@ -1,7 +1,9 @@
 #Daily, monthly, and annual returns
+import pandas as pd
 import matplotlib.pyplot as plt
 from pandas_datareader import DataReader
 from datetime import date
+import seaborn as sns
 start_date=date(2011,11,28)
 end_date=date(2021,11,26)
 series_code='DJIA'
